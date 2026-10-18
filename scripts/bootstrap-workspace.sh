@@ -17,6 +17,15 @@ patches="$root/patches/workspace"
 marker="$ref/.ectopad-workspace"
 want="$(cat "$patches"/*.patch | shasum -a 256 | cut -d' ' -f1)"
 
+# EctoPad's touch shell comes from SunPad (GPL-3.0); its license ships in the app.
+if [ ! -f "$root/ref/sunpad/LICENSE" ]; then
+  echo "EctoPad: fetching SunPad for its license"
+  git init -q "$root/ref/sunpad"
+  git -C "$root/ref/sunpad" remote add origin https://github.com/chrissotraidis/sunpad.git
+  git -C "$root/ref/sunpad" fetch -q --depth 1 origin 24911e836ad9c2ece881b11bf426641abeaf374a
+  git -C "$root/ref/sunpad" checkout -q --detach FETCH_HEAD
+fi
+
 if [ -f "$marker" ] && [ "$(cat "$marker")" = "$want" ]; then
   echo "EctoPad workspace is ready at $ref"
   exit 0
