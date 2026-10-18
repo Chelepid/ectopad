@@ -12,6 +12,19 @@ output="${1:?usage: scripts/build-padmint-ios.sh OUTPUT.ipa}"
 jobs="${ECTOPAD_BUILD_JOBS:-$(sysctl -n hw.ncpu)}"
 cd "$root"
 
+# Metaforce's disc reader (nod) is Rust and must build for iPhone, which needs
+# rustup's toolchain with the aarch64-apple-ios target. Homebrew's own rust has
+# no iPhone standard library, so rustup's tools go first.
+rustup_bin="${CARGO_HOME:-$HOME/.cargo}/bin"
+if [[ -x "$rustup_bin/rustup" ]]; then
+  export PATH="$rustup_bin:$PATH"
+fi
+if ! command -v rustup >/dev/null || ! rustup target list --installed | grep -qx aarch64-apple-ios; then
+  echo "EctoPad needs Rust from rustup with the iPhone target. Run: brew install rustup && rustup-init -y && rustup target add aarch64-apple-ios" >&2
+  exit 1
+fi
+
+
 /bin/bash scripts/bootstrap-workspace.sh
 bash scripts/sync-app-icon.sh
 echo "EctoPad: configuring and building the iOS app"
