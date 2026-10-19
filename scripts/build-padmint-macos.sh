@@ -11,6 +11,8 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 output="${1:?usage: scripts/build-padmint-macos.sh OUTPUT.zip}"
 jobs="${ECTOPAD_BUILD_JOBS:-$(sysctl -n hw.ncpu)}"
 cd "$root"
+# EctoPad's own version (VERSION), so the app, its release and PadMint agree.
+version="$(tr -d '[:space:]' < VERSION)"
 rustup_bin="${CARGO_HOME:-$HOME/.cargo}/bin"
 if [[ -x "$rustup_bin/rustup" ]]; then
   export PATH="$rustup_bin:$PATH"
@@ -34,7 +36,7 @@ iconutil -c icns "$iconset" -o ref/metaforce/Runtime/platforms/macos/mainicon.ic
 
 preset=macos-default-relwithdebinfo
 echo "EctoPad: configuring and building the Mac app"
-(cd ref/metaforce && cmake --preset "$preset" && cmake --build --preset "$preset" --target metaforce --parallel "$jobs")
+(cd ref/metaforce && cmake --preset "$preset" -DMETAFORCE_BUNDLE_SHORT_VERSION="$version" && cmake --build --preset "$preset" --target metaforce --parallel "$jobs")
 
 app="$root/ref/metaforce/build/$preset/Binaries/EctoPad.app"
 binary="$app/Contents/MacOS/EctoPad"
