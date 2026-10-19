@@ -193,8 +193,10 @@ accepted data flow. EctoPad never downloads game data.
 
 ## Getting started
 
-There is no download yet, so you build EctoPad yourself as described below.
-[PadMint](https://github.com/chrissotraidis/padmint) lists EctoPad under **Not available yet** and links back here.
+The easy way: open [PadMint](https://github.com/chrissotraidis/padmint/releases/latest) 0.5.5 or newer
+on an Apple Silicon Mac with Xcode, choose **Metroid Prime**, then **iPhone or iPad** or **This Mac**, and
+follow the page. PadMint builds EctoPad from this repository's latest release; you import your own disc
+image inside EctoPad. To build it by hand instead, follow the steps below.
 
 You currently need:
 
