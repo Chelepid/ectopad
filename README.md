@@ -466,3 +466,12 @@ contributors. Each component retains its own copyright and license. See
 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and
 [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md) for the pinned inventory and
 license summary.
+
+## Legal
+
+EctoPad is an unofficial, fan-made project. It is not affiliated with, endorsed
+by, or sponsored by Nintendo. Metroid Prime and related names and marks are
+trademarks of Nintendo (and their respective owners). This repository contains
+no game data, disc images, or extracted assets. To use it, you need your own
+legally obtained copy of the game, and you build it yourself on your own
+machine. Please don't share game files or builds made from them.
