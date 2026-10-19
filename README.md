@@ -1,14 +1,6 @@
 # EctoPad
 
 <p align="center">
-  <img src="assets/screenshots/ectopad-parasite-queen.jpg" width="100%" alt="EctoPad running the Parasite Queen encounter on iPad with touch controls">
-</p>
-
-<p align="center">
-  <em>The Parasite Queen encounter running on a physical iPad.</em>
-</p>
-
-<p align="center">
   <strong>Metroid Prime through Metaforce, with a complete Apple mobile layer.</strong><br>
   Touch controls, on-device setup, native settings, diagnostics, save-safe
   updates, and targeted device fixes for iPhone, iPad, and Apple Silicon Mac.
@@ -77,31 +69,6 @@ This is **not** a Dolphin or RetroArch frontend, an official Nintendo product,
 or a general GameCube emulator. It requires a user-supplied, legally obtained
 **Metroid Prime (USA, Rev 2)** disc image. No game, disc image, extracted asset,
 save, key, or signing material is included in this repository.
-
-## EctoPad in action
-
-<table>
-  <tr>
-    <td width="50%" valign="top">
-      <img src="assets/screenshots/ectopad-samus-intro.jpg" alt="Samus during an opening cinematic in EctoPad">
-      <br><sub><strong>Original presentation.</strong> Metaforce carries Prime's cinematics, animation, and game flow into the native runtime.</sub>
-    </td>
-    <td width="50%" valign="top">
-      <img src="assets/screenshots/ectopad-inventory.jpg" alt="Metroid Prime inventory screen running in EctoPad">
-      <br><sub><strong>Complete game systems.</strong> Inventory, beams, suits, Morph Ball upgrades, options, and the logbook remain part of the original interface.</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <img src="assets/screenshots/ectopad-chozo-ruins.jpg" alt="Exploring Chozo Ruins in EctoPad with touch controls">
-      <br><sub><strong>Exploration on iPad.</strong> Adjustable touch controls sit over the visor while native render scaling presents larger environments cleanly.</sub>
-    </td>
-    <td width="50%" valign="top">
-      <img src="assets/screenshots/ectopad-samus-closeup.jpg" alt="Samus close-up rendered by EctoPad on iPad">
-      <br><sub><strong>Built on upstream rendering.</strong> Metaforce and Aurora render through Metal; EctoPad adds the iPhone/iPad interface and device workflow.</sub>
-    </td>
-  </tr>
-</table>
 
 ## Project status
 
