@@ -1,0 +1,28 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ee48f6c..73af421 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -84,7 +84,7 @@ mark_as_advanced (WITH_HI_PREC_CLOCK WITH_FLOAT_STD_PREC_CLOCK
+ 
+ # Introspection:
+ 
+-list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
++list (APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
+ 
+ include (CheckFunctionExists)
+ include (CheckIncludeFiles)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index bb01a0d..be87519 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -78,6 +78,10 @@ endif ()
+ 
+ add_library (${PROJECT_NAME} ${LIB_TYPE} ${SOURCES})
+ target_link_libraries (${PROJECT_NAME} PRIVATE ${LIBS} ${LIBM_LIBRARIES})
++# Expose headers + generated soxr-config.h to consumers.
++target_include_directories (${PROJECT_NAME} PUBLIC
++  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
++  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/../>)
+ set_target_properties (${PROJECT_NAME} PROPERTIES
+   VERSION "${SO_VERSION}"
+   SOVERSION ${SO_VERSION_MAJOR}

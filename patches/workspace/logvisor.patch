@@ -1,0 +1,125 @@
+diff --git a/include/logvisor/logvisor.hpp b/include/logvisor/logvisor.hpp
+index 1b0ec87..7d5a259 100644
+--- a/include/logvisor/logvisor.hpp
++++ b/include/logvisor/logvisor.hpp
+@@ -167,9 +167,7 @@ void CreateWin32Console();
+ class Module {
+   const char* m_modName;
+ 
+-  template <typename Char>
+-  void _vreport(Level severity, fmt::basic_string_view<Char> format,
+-                fmt::basic_format_args<fmt::buffer_context<Char>> args) {
++  void _vreport(Level severity, fmt::string_view format, fmt::format_args args) {
+     auto lk = LockLog();
+     ++_LogCounter;
+     if (severity == Fatal)
+@@ -184,9 +182,8 @@ class Module {
+       ++ErrorCount;
+   }
+ 
+-  template <typename Char>
+-  void _vreportSource(Level severity, const char* file, unsigned linenum, fmt::basic_string_view<Char> format,
+-                      fmt::basic_format_args<fmt::buffer_context<Char>> args) {
++  void _vreportSource(Level severity, const char* file, unsigned linenum, fmt::string_view format,
++                      fmt::format_args args) {
+     auto lk = LockLog();
+     ++_LogCounter;
+     if (severity == Fatal)
+@@ -209,18 +206,14 @@ public:
+    * @param severity Level of log report severity
+    * @param format fmt-style format string
+    */
+-  template <typename S, typename... Args, typename Char = fmt::char_t<S>>
+-  void report(Level severity, const S& format, Args&&... args) {
++  template <typename... Args>
++  void report(Level severity, fmt::format_string<Args...> format, Args&&... args) {
+     if (MainLoggers.empty() && severity != Level::Fatal)
+       return;
+-    _vreport(severity, fmt::to_string_view<Char>(format),
+-             fmt::basic_format_args<fmt::buffer_context<Char>>(
+-                 fmt::make_args_checked<Args...>(format, std::forward<Args>(args)...)));
++    _vreport(severity, format.get(), fmt::make_format_args(args...));
+   }
+ 
+-  template <typename Char>
+-  void vreport(Level severity, fmt::basic_string_view<Char> format,
+-               fmt::basic_format_args<fmt::buffer_context<Char>> args) {
++  void vreport(Level severity, fmt::string_view format, fmt::format_args args) {
+     if (MainLoggers.empty() && severity != Level::Fatal)
+       return;
+     _vreport(severity, format, args);
+@@ -233,18 +226,16 @@ public:
+    * @param linenum Source line number from __LINE__ macro
+    * @param format fmt-style format string
+    */
+-  template <typename S, typename... Args, typename Char = fmt::char_t<S>>
+-  void reportSource(Level severity, const char* file, unsigned linenum, const S& format, Args&&... args) {
++  template <typename... Args>
++  void reportSource(Level severity, const char* file, unsigned linenum, fmt::format_string<Args...> format,
++                    Args&&... args) {
+     if (MainLoggers.empty() && severity != Level::Fatal)
+       return;
+-    _vreportSource(severity, file, linenum, fmt::to_string_view<Char>(format),
+-                   fmt::basic_format_args<fmt::buffer_context<Char>>(
+-                       fmt::make_args_checked<Args...>(format, std::forward<Args>(args)...)));
++    _vreportSource(severity, file, linenum, format.get(), fmt::make_format_args(args...));
+   }
+ 
+-  template <typename Char>
+-  void vreportSource(Level severity, const char* file, unsigned linenum, fmt::basic_string_view<Char> format,
+-                     fmt::basic_format_args<fmt::buffer_context<Char>> args) {
++  void vreportSource(Level severity, const char* file, unsigned linenum, fmt::string_view format,
++                     fmt::format_args args) {
+     if (MainLoggers.empty() && severity != Level::Fatal)
+       return;
+     _vreportSource(severity, file, linenum, format, args);
+@@ -258,7 +249,7 @@ struct formatter<tp, char> { \
+   template <typename ParseContext> \
+   constexpr auto parse(ParseContext &ctx) { return ctx.begin(); } \
+   template <typename FormatContext> \
+-  auto format(const tp &obj, FormatContext &ctx) { \
++  auto format(const tp &obj, FormatContext &ctx) const { \
+     return format_to(ctx.out(), FMT_STRING(fmtstr), __VA_ARGS__); \
+   } \
+ }; \
+@@ -267,7 +258,7 @@ struct formatter<tp, wchar_t> { \
+   template <typename ParseContext> \
+   constexpr auto parse(ParseContext &ctx) { return ctx.begin(); } \
+   template <typename FormatContext> \
+-  auto format(const tp &obj, FormatContext &ctx) { \
++  auto format(const tp &obj, FormatContext &ctx) const { \
+     return format_to(ctx.out(), FMT_STRING(L##fmtstr), __VA_ARGS__); \
+   } \
+ }; \
+@@ -276,7 +267,7 @@ struct formatter<tp, char16_t> { \
+   template <typename ParseContext> \
+   constexpr auto parse(ParseContext &ctx) { return ctx.begin(); } \
+   template <typename FormatContext> \
+-  auto format(const tp &obj, FormatContext &ctx) { \
++  auto format(const tp &obj, FormatContext &ctx) const { \
+     return format_to(ctx.out(), FMT_STRING(u##fmtstr), __VA_ARGS__); \
+   } \
+ }; \
+@@ -285,7 +276,7 @@ struct formatter<tp, char32_t> { \
+   template <typename ParseContext> \
+   constexpr auto parse(ParseContext &ctx) { return ctx.begin(); } \
+   template <typename FormatContext> \
+-  auto format(const tp &obj, FormatContext &ctx) { \
++  auto format(const tp &obj, FormatContext &ctx) const { \
+     return format_to(ctx.out(), FMT_STRING(U##fmtstr), __VA_ARGS__); \
+   } \
+ }; \
+@@ -293,10 +284,8 @@ struct formatter<tp, char32_t> { \
+ 
+ } // namespace logvisor
+ 
+-template <typename S, typename... Args, typename Char = fmt::char_t<S>>
+-void quicklog(const S& format, Args&&... args) {
++template <typename... Args>
++void quicklog(fmt::format_string<Args...> format, Args&&... args) {
+   logvisor::MainLoggers[0]->report(
+-      "quick", logvisor::Info, fmt::to_string_view<Char>(format),
+-      fmt::basic_format_args<fmt::buffer_context<Char>>(
+-          fmt::make_args_checked<Args...>(format, std::forward<Args>(args)...)));
++      "quick", logvisor::Info, format.get(), fmt::make_format_args(args...));
+ }
