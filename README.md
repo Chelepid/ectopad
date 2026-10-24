@@ -16,6 +16,11 @@
   <a href="https://discord.gg/xwHfUD2bxW"><img alt="Join the EctoPad Discord" src="https://img.shields.io/badge/Discord-Join%20the%20community-5865F2?logo=discord&amp;logoColor=white"></a>
 </p>
 
+> [!IMPORTANT]
+> **EctoPad is paused.** AxioDL has made Metaforce and Zeus private until their own
+> public release, so EctoPad can't be built right now and PadMint lists it as paused.
+> EctoPad will be available again once that source is public.
+
 EctoPad is a downstream Apple integration of
 [Metaforce](https://github.com/AxioDL/metaforce), the native Metroid Prime
 engine originally authored by Jack Andersen and Phillip "Antidote" Stephens
@@ -159,6 +164,9 @@ The supported raw ISO/GCM is 1,459,978,240 bytes and has SHA-1
 accepted data flow. EctoPad never downloads game data.
 
 ## Getting started
+
+EctoPad is paused for now (see the notice at the top), so the steps below won't
+complete until Metaforce's source is public again.
 
 The easy way: open [PadMint](https://github.com/chrissotraidis/padmint/releases/latest) 0.5.5 or newer
 on an Apple Silicon Mac with Xcode, choose **Metroid Prime**, then **iPhone or iPad** or **This Mac**, and
